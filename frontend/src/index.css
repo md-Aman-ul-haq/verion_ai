@@ -1,11 +1,53 @@
 @import "tailwindcss";
 
 @theme {
-  --color-primary: #3b82f6; /* Blue 500 */
-  --color-secondary: #10b981; /* Emerald 500 */
-  --color-accent: #8b5cf6; /* Violet 500 */
-  --color-dark: #0f172a; /* Slate 900 */
-  --color-dark-panel: #1e293b; /* Slate 800 */
+  --color-primary: #a855f7; /* Purple 500 */
+  --color-secondary: #c084fc; /* Purple 400 */
+  --color-accent: #e9d5ff; /* Purple 200 */
+  
+  --color-dark: #09090b; /* Zinc 950 */
+  --color-dark-panel: #18181b; /* Zinc 900 */
+  --color-light: #fafafa; /* Zinc 50 */
+  
+  --animate-gradient-x: gradient-x 3s ease infinite;
+  --animate-pulse-slow: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  --animate-float: float 6s ease-in-out infinite;
+  --animate-spin-slow: spin 25s linear infinite;
+  --animate-spin-reverse-slow: spin-reverse 30s linear infinite;
+  --animate-spin-medium: spin 16s linear infinite;
+  --animate-spin-reverse-medium: spin-reverse 18s linear infinite;
+  --animate-spin-fast: spin 8s linear infinite;
+  --animate-dots-drift: dots-drift 20s linear infinite;
+  --animate-dots-drift-slow: dots-drift-slow 30s linear infinite;
+  
+  @keyframes spin-reverse {
+    from { transform: rotate(360deg); }
+    to { transform: rotate(0deg); }
+  }
+  
+  @keyframes gradient-x {
+    0%, 100% {
+      background-size: 200% 200%;
+      background-position: left center;
+    }
+    50% {
+      background-size: 200% 200%;
+      background-position: right center;
+    }
+  }
+
+  @keyframes float {
+    0% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+    100% { transform: translateY(0px); }
+  }
+
+  @keyframes zoom-through {
+    0%   { transform: scale(0.3); opacity: 0; }
+    12%  { opacity: 0.65; }
+    88%  { opacity: 0.65; }
+    100% { transform: scale(2.8); opacity: 0; }
+  }
 }
 
 @layer base {
@@ -13,23 +55,69 @@
     background-color: var(--color-dark);
     color: white;
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
-    background-image: 
-      radial-gradient(circle at 15% 50%, rgba(59, 130, 246, 0.08), transparent 25%),
-      radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.08), transparent 25%);
-    background-attachment: fixed;
+  }
+  
+  html {
+    scroll-behavior: smooth;
   }
 }
 
 @layer components {
-  .glass-panel {
-    @apply bg-slate-800/40 backdrop-blur-xl border border-slate-700/50 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)];
+  /* Minimalist pill button */
+  .btn-pill {
+    @apply inline-flex items-center justify-center rounded-full border border-white/20 bg-transparent px-8 py-4 text-sm font-medium text-white transition-all hover:bg-white/10 active:scale-95;
   }
   
+  .btn-pill-dark {
+    @apply inline-flex items-center justify-center rounded-full border border-zinc-300 bg-transparent px-8 py-4 text-sm font-medium text-zinc-900 transition-all hover:bg-zinc-100 active:scale-95;
+  }
+
+  /* Dot matrix background pattern */
+  .bg-dot-matrix {
+    background-color: #09090b;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.15) 1px, transparent 1px);
+    background-size: 20px 20px;
+  }
+
+  /* Thicker, more prominent dot matrix background pattern */
+  .bg-dot-matrix-thick {
+    background-color: #09090b;
+    background-image: radial-gradient(rgba(255, 255, 255, 0.28) 2px, transparent 2px);
+    background-size: 24px 24px;
+  }
+
+  /* Infinite zoom-tunnel dot layer 1 — rushes from far to close */
+  .bg-dots-animated {
+    background-image: radial-gradient(circle, rgba(255,255,255,0.95) 2px, transparent 2px);
+    background-size: 80px 80px;
+    background-position: center center;
+    transform-origin: center center;
+    animation: zoom-through 7s ease-in infinite;
+  }
+
+  /* Infinite zoom-tunnel dot layer 2 — offset by half, creates seamless cross-through */
+  .bg-dots-animated-slow {
+    background-image: radial-gradient(circle, rgba(255,255,255,0.7) 2px, transparent 2px);
+    background-size: 80px 80px;
+    background-position: center center;
+    transform-origin: center center;
+    animation: zoom-through 7s ease-in infinite;
+    animation-delay: -3.5s;
+  }
+
+  /* Input fields */
   .glass-input {
-    @apply bg-slate-900/50 border border-slate-700/50 focus:border-primary/50 focus:ring-2 focus:ring-primary/20 backdrop-blur-md outline-none transition-all;
+    @apply bg-zinc-900/50 border border-zinc-700/50 focus:border-primary/50 focus:ring-2 focus:ring-primary/20 backdrop-blur-md outline-none transition-all rounded-xl;
   }
   
-  .btn-primary {
-    @apply bg-gradient-to-r from-primary to-accent hover:opacity-90 text-white font-medium py-3 rounded-xl transition-all shadow-[0_0_20px_rgba(59,130,246,0.3)] hover:shadow-[0_0_25px_rgba(59,130,246,0.5)] active:scale-[0.98];
+  .glass-panel {
+    @apply bg-zinc-900/40 backdrop-blur-xl border border-zinc-800 shadow-xl;
+  }
+}
+
+@utility hide-scrollbar {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
   }
 }
