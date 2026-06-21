@@ -110,6 +110,245 @@ const CASE_STUDIES = [
   }
 ];
 
+const DASHBOARD_PRODUCTS = [
+  {
+    title: "Men's Running Shoes",
+    seo: 96,
+    status: "Optimized",
+    badge: "bg-emerald-500/20 text-emerald-400",
+    logs: [
+      { color: "text-zinc-500", text: "> Initializing SEO optimization agent..." },
+      { color: "text-sky-300 font-semibold", text: '> [SEO Agent] Keywords: "lightweight", "running shoes", "marathon training"' },
+      { color: "text-zinc-500", text: "> Sanitizing vendor details..." },
+      { color: "text-emerald-400 font-semibold", text: "> [Privacy Guard] Redacted wholesale cost $12.50 → [SAFE]" },
+      { color: "text-zinc-500", text: "> Validating grammatical quality index..." },
+      { color: "text-white font-semibold", text: "> [Validator Agent] Flesch Reading Ease: 72.8 (Optimal)" },
+    ],
+    before: { title: "Men's Running Shoes", desc: "Good running shoes for men." },
+    after: { title: "Lightweight Men's Running Shoes for Daily Training & Marathon Prep", desc: "Engineered for comfort with breathable mesh, responsive cushioning, and durable outsole technology." },
+  },
+  {
+    title: "Leather Hiking Boots",
+    seo: 94,
+    status: "Optimized",
+    badge: "bg-emerald-500/20 text-emerald-400",
+    logs: [
+      { color: "text-zinc-500", text: "> Importing product spec from catalog..." },
+      { color: "text-sky-300 font-semibold", text: '> [SEO Agent] Keywords: "leather hiking boots", "waterproof", "trail-ready"' },
+      { color: "text-zinc-500", text: "> Running brand voice alignment check..." },
+      { color: "text-violet-300 font-semibold", text: "> [Content Gen] Generated 3 title variants. Selecting highest-scoring..." },
+      { color: "text-emerald-400 font-semibold", text: "> [Privacy Guard] No sensitive fields detected." },
+      { color: "text-white font-semibold", text: "> [Validator Agent] Grammar OK. Readability score: 68.4 (Good)" },
+    ],
+    before: { title: "Leather Hiking Boots", desc: "Durable boots for hiking." },
+    after: { title: "Premium Waterproof Leather Hiking Boots – Built for Every Trail", desc: "Full-grain leather upper with waterproof lining, aggressive lug outsole, and ankle support for all-terrain confidence." },
+  },
+  {
+    title: "Waterproof Dome Tent",
+    seo: 42,
+    status: "Pending",
+    badge: "bg-yellow-500/20 text-yellow-400",
+    logs: [
+      { color: "text-zinc-500", text: "> Low SEO score detected (42%) — triggering full rewrite..." },
+      { color: "text-yellow-300 font-semibold", text: '> [SEO Agent] Missing keywords: "camping tent", "2-person", "3-season"' },
+      { color: "text-zinc-500", text: "> Analyzing competitor listings for keyword gaps..." },
+      { color: "text-violet-300 font-semibold", text: "> [Content Gen] Drafting enriched description with USPs..." },
+      { color: "text-zinc-500", text: "> Checking for brand guideline compliance..." },
+      { color: "text-amber-400 font-semibold", text: "> [Validator Agent] Warning: Title too generic — regenerating..." },
+    ],
+    before: { title: "Waterproof Dome Tent", desc: "Good tent for outdoor use." },
+    after: { title: "2-Person Waterproof Dome Camping Tent – 3-Season Ultralight Shelter", desc: "Ripstop nylon shell with 3000mm hydrostatic rating, dual vestibules, and fast-pitch pole system for solo or duo campers." },
+  },
+  {
+    title: "Wireless Charging Pad",
+    seo: 89,
+    status: "Optimized",
+    badge: "bg-emerald-500/20 text-emerald-400",
+    logs: [
+      { color: "text-zinc-500", text: "> Parsing product spec sheet..." },
+      { color: "text-sky-300 font-semibold", text: '> [SEO Agent] Keywords: "wireless charger", "Qi compatible", "15W fast charge"' },
+      { color: "text-emerald-400 font-semibold", text: "> [Privacy Guard] Redacted supplier margin $4.20 → [SAFE]" },
+      { color: "text-violet-300 font-semibold", text: "> [Content Gen] Highlighting key feature: multi-device support..." },
+      { color: "text-zinc-500", text: "> Running final quality audit..." },
+      { color: "text-white font-semibold", text: "> [Validator Agent] All checks passed. Listing ready to publish." },
+    ],
+    before: { title: "Wireless Charging Pad", desc: "Charges phones wirelessly." },
+    after: { title: "15W Qi Wireless Charging Pad – Fast Charge for iPhone, Samsung & AirPods", desc: "Universal Qi-certified pad delivers up to 15W fast charging for all compatible devices with LED status indicator and non-slip base." },
+  },
+];
+
+// ── Interactive Dashboard Component ──
+type DashboardProduct = {
+  title: string;
+  seo: number;
+  status: string;
+  badge: string;
+  logs: { color: string; text: string }[];
+  before: { title: string; desc: string };
+  after: { title: string; desc: string };
+};
+
+const InteractiveDashboard = ({ products }: { products: DashboardProduct[] }) => {
+  const [activeProduct, setActiveProduct] = useState(0);
+  const [logKey, setLogKey] = useState(0);
+  const p = products[activeProduct];
+
+  const handleSelect = (idx: number) => {
+    setActiveProduct(idx);
+    setLogKey(k => k + 1);
+  };
+
+  const seoBarColor = (seo: number) =>
+    seo >= 80 ? 'bg-emerald-400' : seo >= 60 ? 'bg-yellow-400' : 'bg-red-400';
+
+  return (
+    <div className="grid lg:grid-cols-12 gap-6 items-stretch">
+
+      {/* ── Left: Console (col-span-7) ── */}
+      <div className="lg:col-span-7 rounded-3xl border border-white/10 bg-zinc-900/50 flex flex-col shadow-2xl relative overflow-hidden">
+        <div className="absolute inset-0 bg-dot-matrix opacity-10 pointer-events-none" />
+
+        {/* Window chrome */}
+        <div className="flex items-center justify-between border-b border-zinc-800 px-5 py-3 z-10">
+          <div className="flex items-center gap-3">
+            <div className="flex gap-1.5">
+              <span className="w-3 h-3 rounded-full bg-red-500/80" />
+              <span className="w-3 h-3 rounded-full bg-yellow-500/80" />
+              <span className="w-3 h-3 rounded-full bg-green-500/80" />
+            </div>
+            <span className="text-[11px] font-mono text-zinc-500 ml-3">console.verion.ai</span>
+          </div>
+          <span className="px-3 py-1 rounded border border-zinc-700/40 text-zinc-300 font-mono text-[10px] tracking-wider uppercase font-bold animate-pulse">
+            Live Swarm Monitor
+          </span>
+        </div>
+
+        <div className="grid md:grid-cols-12 gap-4 flex-1 p-4 z-10">
+
+          {/* Product Catalog Column */}
+          <div className="md:col-span-5 bg-zinc-950/60 rounded-2xl border border-white/5 p-4 flex flex-col gap-2">
+            <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-500 mb-1 block">Store Catalog</span>
+            {products.map((prod, idx) => (
+              <button
+                key={idx}
+                onClick={() => handleSelect(idx)}
+                className={`w-full text-left p-3 rounded-xl border flex flex-col gap-1.5 cursor-pointer transition-all duration-300 group
+                  ${activeProduct === idx
+                    ? 'bg-zinc-800 border-zinc-600 shadow-[0_0_0_1px_rgba(255,255,255,0.05)]'
+                    : 'bg-zinc-900/40 border-zinc-800/50 hover:bg-zinc-800/60 hover:border-zinc-700'
+                  }`}
+              >
+                <div className="flex justify-between items-start">
+                  <span className={`font-semibold text-xs truncate max-w-[130px] transition-colors ${activeProduct === idx ? 'text-white' : 'text-zinc-300 group-hover:text-white'}`}>
+                    {prod.title}
+                  </span>
+                  <span className={`text-[9px] font-mono px-2 py-0.5 rounded font-bold shrink-0 ${prod.badge}`}>{prod.status}</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <div className="flex-1 h-1 rounded-full bg-zinc-800 overflow-hidden">
+                    <div
+                      className={`h-full rounded-full transition-all duration-500 ${seoBarColor(prod.seo)}`}
+                      style={{ width: `${prod.seo}%` }}
+                    />
+                  </div>
+                  <span className="font-mono text-[9px] text-zinc-400 shrink-0">{prod.seo}%</span>
+                </div>
+              </button>
+            ))}
+          </div>
+
+          {/* Agent Log Stream */}
+          <div key={logKey} className="md:col-span-7 bg-zinc-950/80 rounded-2xl border border-white/5 p-4 flex flex-col font-mono text-[10px] gap-2 justify-between">
+            <div>
+              <div className="flex justify-between border-b border-zinc-900 pb-2 mb-3">
+                <span className="text-zinc-500">// active_agent_stream</span>
+                <span className="text-zinc-300 font-bold">{new Date().toLocaleTimeString('en-US', { hour12: false })}</span>
+              </div>
+              <div className="space-y-2 leading-relaxed">
+                {p.logs.map((log, i) => (
+                  <p
+                    key={i}
+                    className={log.color}
+                    style={{
+                      animationName: 'fadeSlideIn',
+                      animationDuration: '0.4s',
+                      animationTimingFunction: 'ease-out',
+                      animationFillMode: 'both',
+                      animationDelay: `${i * 120}ms`,
+                    }}
+                  >
+                    {log.text}
+                  </p>
+                ))}
+              </div>
+            </div>
+            <div className="pt-2 border-t border-zinc-900 flex justify-between items-center mt-2">
+              <span className="text-zinc-500">Processing: {p.title}</span>
+              <span className={`font-bold animate-pulse font-sans ${p.status === 'Pending' ? 'text-yellow-400' : 'text-emerald-400'}`}>
+                {p.status === 'Pending' ? 'Optimizing...' : 'Draft Synced ✓'}
+              </span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* ── Right: Before & After Panel (col-span-5) ── */}
+      <div className="lg:col-span-5 rounded-3xl border border-white/5 bg-zinc-900/30 p-6 md:p-8 flex flex-col gap-6 relative overflow-hidden shadow-xl">
+        <div className="absolute top-0 right-0 w-40 h-40 bg-white/2 rounded-full blur-3xl pointer-events-none" />
+
+        <div>
+          <span className="text-[10px] font-mono tracking-widest text-zinc-500 uppercase block mb-1">Outcome Comparison</span>
+          <h3 className="text-xl font-medium">Before &amp; After Listing</h3>
+        </div>
+
+        {/* Before */}
+        <div className="p-5 bg-zinc-950/60 rounded-2xl border border-red-500/10 hover:border-red-500/30 transition-all duration-300 relative">
+          <span className="absolute -top-2.5 left-4 bg-red-500/20 text-red-400 border border-red-500/30 text-[9px] font-mono uppercase tracking-widest px-2.5 py-0.5 rounded-full font-bold">
+            Before
+          </span>
+          <div className="space-y-2 mt-1">
+            <h4 className="font-semibold text-sm text-zinc-300 leading-snug">Title: {p.before.title}</h4>
+            <p className="text-xs text-zinc-500 font-light leading-relaxed">{p.before.desc}</p>
+          </div>
+        </div>
+
+        {/* After */}
+        <div className="p-5 bg-zinc-950/60 rounded-2xl border border-emerald-500/10 hover:border-emerald-500/30 transition-all duration-300 relative flex-1">
+          <span className="absolute -top-2.5 left-4 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[9px] font-mono uppercase tracking-widest px-2.5 py-0.5 rounded-full font-bold">
+            After — AI Optimized
+          </span>
+          <div className="space-y-2.5 mt-1">
+            <h4 className="font-semibold text-sm text-white leading-snug">Title: {p.after.title}</h4>
+            <p className="text-xs text-zinc-300 font-light leading-relaxed">{p.after.desc}</p>
+          </div>
+        </div>
+
+        {/* SEO Score indicator */}
+        <div className="flex items-center gap-3">
+          <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-wider">SEO Score</span>
+          <div className="flex-1 h-1.5 rounded-full bg-zinc-800 overflow-hidden">
+            <div
+              className={`h-full rounded-full transition-all duration-700 ease-out ${seoBarColor(p.seo)}`}
+              style={{ width: `${p.seo}%` }}
+            />
+          </div>
+          <span className={`font-mono text-xs font-bold ${seoBarColor(p.seo).replace('bg-', 'text-')}`}>{p.seo}%</span>
+        </div>
+      </div>
+
+      {/* Inline keyframe for log line animation */}
+      <style>{`
+        @keyframes fadeSlideIn {
+          from { opacity: 0; transform: translateY(6px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
+    </div>
+  );
+};
+
+
+
 const LandingPage = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [activeCard, setActiveCard] = useState<number | null>(null);
@@ -762,28 +1001,28 @@ const LandingPage = () => {
               {/* Agent Cards */}
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
                 {[
-                  { name: "Content Generator", role: "Description Writer", stage: "Drafting", desc: "Creates rich product titles, bullet points, and descriptions from raw specs. It analyzes brand guidelines to ensure tone consistency and automatically highlights key selling features for maximum customer engagement.", icon: <FileText className="w-5 h-5 text-zinc-600" /> },
-                  { name: "SEO Agent", role: "Discoverability", stage: "Optimization", desc: "Embeds target keywords and optimizes page titles and meta tags for search. It continuously monitors search trends and algorithm updates, ensuring your products consistently rank on the first page.", icon: <Search className="w-5 h-5 text-zinc-600" /> },
-                  { name: "Privacy Agent", role: "Security Guard", stage: "Sanitization", desc: "Redacts supplier names, margin data, and PII before any content goes live. This ensures compliance with global data protection regulations while protecting your proprietary wholesale information.", icon: <Lock className="w-5 h-5 text-zinc-600" /> },
-                  { name: "Validator Agent", role: "Quality Auditor", stage: "Auditing", desc: "Checks grammar, readability, and brand compliance across all drafts. It flags inconsistencies, prevents hallucinatory claims, and guarantees that published listings meet enterprise quality standards.", icon: <CheckCircle2 className="w-5 h-5 text-zinc-600" /> },
-                  { name: "Manager Agent", role: "Coordinator", stage: "Delivery", desc: "Orchestrates the pipeline and routes approved content for one-click publishing. It handles task delegation between agents, manages API rate limits, and provides real-time progress tracking.", icon: <Cpu className="w-5 h-5 text-zinc-600" /> }
+                  { name: "Content Generator", role: "Description Writer", stage: "Drafting", desc: "Creates rich product titles, bullet points, and descriptions from raw specs. It analyzes brand guidelines to ensure tone consistency and automatically highlights key selling features for maximum customer engagement.", icon: <FileText className="w-5 h-5 text-violet-600" /> },
+                  { name: "SEO Agent", role: "Discoverability", stage: "Optimization", desc: "Embeds target keywords and optimizes page titles and meta tags for search. It continuously monitors search trends and algorithm updates, ensuring your products consistently rank on the first page.", icon: <Search className="w-5 h-5 text-sky-600" /> },
+                  { name: "Privacy Agent", role: "Security Guard", stage: "Sanitization", desc: "Redacts supplier names, margin data, and PII before any content goes live. This ensures compliance with global data protection regulations while protecting your proprietary wholesale information.", icon: <Lock className="w-5 h-5 text-emerald-600" /> },
+                  { name: "Validator Agent", role: "Quality Auditor", stage: "Auditing", desc: "Checks grammar, readability, and brand compliance across all drafts. It flags inconsistencies, prevents hallucinatory claims, and guarantees that published listings meet enterprise quality standards.", icon: <CheckCircle2 className="w-5 h-5 text-amber-600" /> },
+                  { name: "Manager Agent", role: "Coordinator", stage: "Delivery", desc: "Orchestrates the pipeline and routes approved content for one-click publishing. It handles task delegation between agents, manages API rate limits, and provides real-time progress tracking.", icon: <Cpu className="w-5 h-5 text-orange-600" /> }
                 ].map((agent, aIdx) => (
                   <div
                     key={aIdx}
                     className={`rounded-2xl border overflow-hidden p-4 flex flex-col shadow-sm cursor-pointer group transition-all duration-500 ease-out active:scale-[0.97] ${activeChallenge === (aIdx + 100)
-                      ? 'bg-white/85 border-zinc-500 shadow-[0_12px_28px_rgba(0,0,0,0.10)]'
-                      : 'border-zinc-200 bg-white/80 hover:-translate-y-1 hover:border-zinc-500 hover:shadow-md'
+                      ? 'bg-white border-zinc-400 shadow-[0_12px_28px_rgba(0,0,0,0.10)]'
+                      : 'border-zinc-200 bg-white hover:-translate-y-1 hover:border-zinc-400 hover:shadow-md'
                       } ${solutionVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16'}`}
                     style={{ transitionDelay: solutionVisible ? `${200 + aIdx * 100}ms` : '0ms' }}
                     onClick={() => setActiveChallenge(activeChallenge === (aIdx + 100) ? null : (aIdx + 100))}
                   >
                     <div className="flex justify-between items-start mb-3">
-                      <div className="w-8 h-8 rounded-xl bg-zinc-800 border border-zinc-700/50 flex items-center justify-center shrink-0 group-hover:scale-110 transition-transform">
+                      <div className="w-9 h-9 rounded-xl bg-zinc-100 border border-zinc-200 flex items-center justify-center shrink-0 group-hover:scale-110 group-hover:bg-zinc-200 transition-all duration-300">
                         {agent.icon}
                       </div>
-                      <Maximize2 className={`w-3 h-3 text-zinc-500 transition-all duration-400 group-hover:text-zinc-500 ${activeChallenge === (aIdx + 100) ? 'text-zinc-500 rotate-180' : ''}`} />
+                      <Maximize2 className={`w-3 h-3 text-zinc-400 transition-all duration-300 group-hover:text-zinc-600 ${activeChallenge === (aIdx + 100) ? 'text-zinc-600 rotate-180' : ''}`} />
                     </div>
-                    <span className="text-[9px] font-mono uppercase tracking-widest text-zinc-500 mb-0.5">{agent.stage}</span>
+                    <span className="text-[9px] font-mono uppercase tracking-widest text-zinc-400 mb-0.5">{agent.stage}</span>
                     <h4 className="text-xs font-semibold text-zinc-950 leading-tight mb-0.5">{agent.name}</h4>
                     <p className="text-[10px] text-zinc-500 font-mono">{agent.role}</p>
                     <div className={`grid transition-all duration-400 ease-in-out ${activeChallenge === (aIdx + 100) ? 'grid-rows-[1fr] opacity-100 mt-2' : 'grid-rows-[0fr] opacity-0'}`}>
@@ -841,75 +1080,95 @@ const LandingPage = () => {
           </section>
 
           {/* ── Features Section (Light) ── */}
-          <section id="features" ref={servicesRef} className="py-16 px-8 text-zinc-950 relative bg-[#faf9f6] border-t border-zinc-200">
+          <section id="features" ref={servicesRef} className="py-20 px-8 text-zinc-950 relative bg-[#faf9f6] border-t border-zinc-200">
             <div className="max-w-7xl mx-auto relative z-10">
-              <span className={`text-zinc-500 font-medium mb-16 block text-lg transition-all duration-700 ease-out ${servicesVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-8'}`}>Features & Capabilities</span>
 
-              <div className="grid lg:grid-cols-2 gap-16 items-center">
-
-                {/* Dynamic Service Visual Preview (Dark Card on Light Bg) */}
-                <div className={`relative w-full h-[400px] rounded-3xl bg-zinc-900 border border-zinc-800 p-6 md:p-8 flex flex-col justify-between overflow-hidden shadow-[0_20px_50px_rgba(0,0,0,0.15)] transition-all duration-700 ease-out delay-200 ${servicesVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16'}`}>
-                  <div className="absolute inset-0 bg-gradient-to-br from-zinc-800/10 via-zinc-900/40 to-transparent pointer-events-none" />
-                  <div className="absolute inset-0 bg-dot-matrix opacity-10 pointer-events-none" />
-                  <div className="relative z-10 w-full h-full flex flex-col">
-                    {renderServiceVisual(currentService)}
-                  </div>
-                </div>
-
-                {/* Dynamic Service Details */}
-                <div className={`flex flex-col justify-center min-h-[350px] transition-all duration-700 ease-out delay-[400ms] ${servicesVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-16'}`}>
-                  <span className="text-xs uppercase tracking-widest font-mono text-zinc-500 font-bold mb-3 block">
-                    {SERVICES_DATA[currentService].category}
-                  </span>
-                  <h3 className="text-3xl md:text-4xl font-medium mb-6 text-zinc-950 transition-all duration-300">
-                    {SERVICES_DATA[currentService].title}
-                  </h3>
-                  <p className="text-lg text-zinc-500 leading-relaxed mb-12 min-h-[120px] transition-all duration-300">
-                    {SERVICES_DATA[currentService].description}
-                  </p>
-
-                  {/* Carousel Controls */}
-                  <div className="flex items-center justify-between">
-                    {/* Dots Indicator */}
-                    <div className="flex gap-2">
-                      {SERVICES_DATA.map((_, idx) => (
-                        <button
-                          key={idx}
-                          onClick={() => setCurrentService(idx)}
-                          className={`w-2.5 h-2.5 rounded-full transition-all duration-300 cursor-pointer ${currentService === idx
-                            ? 'bg-zinc-950 w-6'
-                            : 'bg-zinc-300 hover:bg-zinc-400'
-                            }`}
-                          aria-label={`Go to service ${idx + 1}`}
-                        />
-                      ))}
-                    </div>
-                    {/* Next/Prev Buttons */}
-                    <div className="flex gap-4">
-                      <button
-                        onClick={handlePrevService}
-                        className="w-12 h-12 rounded-full border border-zinc-300 flex items-center justify-center hover:bg-zinc-200 hover:border-zinc-400 transition-colors cursor-pointer text-zinc-500 hover:text-zinc-950 active:scale-95"
-                        aria-label="Previous service"
-                      >
-                        <ChevronLeft className="w-5 h-5" />
-                      </button>
-                      <button
-                        onClick={handleNextService}
-                        className="w-12 h-12 rounded-full border border-zinc-300 flex items-center justify-center hover:bg-zinc-200 hover:border-zinc-400 transition-colors cursor-pointer text-zinc-500 hover:text-zinc-950 active:scale-95"
-                        aria-label="Next service"
-                      >
-                        <ChevronRight className="w-5 h-5" />
-                      </button>
-                    </div>
-                  </div>
-                </div>
-
+              {/* Section header */}
+              <div className={`mb-16 transition-all duration-700 ease-out ${servicesVisible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-8'}`}>
+                <span className="text-zinc-500 font-medium block text-lg mb-1">Features &amp; Capabilities</span>
+                <h2 className="text-3xl md:text-4xl font-semibold text-zinc-900 mt-2 mb-3">Everything You Need, Built In</h2>
+                <p className="text-zinc-500 text-base max-w-xl">Each capability is a dedicated AI agent — working in parallel to maximize every listing's potential.</p>
               </div>
 
-              <div className={`mt-32 pt-8 border-t border-zinc-200 flex items-center gap-4 transition-all duration-700 ease-out delay-[600ms] ${servicesVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+              {/* ── Carousel Preview Strip ── */}
+              <div className={`rounded-3xl border border-zinc-200 bg-white shadow-sm overflow-hidden transition-all duration-700 ease-out delay-[500ms] ${servicesVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
+                <div className="grid lg:grid-cols-2 gap-0 items-stretch">
+
+                  {/* Visual Preview (Dark Card) */}
+                  <div className="relative min-h-[380px] bg-zinc-900 p-6 md:p-8 flex flex-col justify-between overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-br from-zinc-800/10 via-zinc-900/40 to-transparent pointer-events-none" />
+                    <div className="absolute inset-0 bg-dot-matrix opacity-10 pointer-events-none" />
+                    <div className="relative z-10 w-full h-full flex flex-col">
+                      {renderServiceVisual(currentService)}
+                    </div>
+                  </div>
+
+                  {/* Service Details */}
+                  <div className="flex flex-col justify-center p-8 md:p-10 min-h-[380px]">
+                    <span className="text-[10px] uppercase tracking-widest font-mono text-zinc-400 font-bold mb-3 block transition-all duration-300">
+                      {SERVICES_DATA[currentService].category}
+                    </span>
+                    <h3 className="text-2xl md:text-3xl font-semibold mb-4 text-zinc-950 transition-all duration-300">
+                      {SERVICES_DATA[currentService].title}
+                    </h3>
+                    <p className="text-base text-zinc-500 leading-relaxed mb-10 min-h-[80px] transition-all duration-300">
+                      {SERVICES_DATA[currentService].description}
+                    </p>
+
+                    {/* Controls */}
+                    <div className="flex items-center justify-between">
+                      {/* Dot indicators */}
+                      <div className="flex gap-2 items-center">
+                        {SERVICES_DATA.map((_, idx) => (
+                          <button
+                            key={idx}
+                            onClick={() => setCurrentService(idx)}
+                            aria-label={`Go to feature ${idx + 1}`}
+                            className={`rounded-full transition-all duration-300 cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-zinc-400
+                              ${currentService === idx
+                                ? 'w-6 h-2.5 bg-zinc-900'
+                                : 'w-2.5 h-2.5 bg-zinc-200 hover:bg-zinc-400 hover:scale-110'
+                              }`}
+                          />
+                        ))}
+                      </div>
+
+                      {/* Prev / Next */}
+                      <div className="flex gap-3">
+                        <button
+                          onClick={handlePrevService}
+                          aria-label="Previous feature"
+                          className="group/btn relative w-12 h-12 rounded-full border border-zinc-200 flex items-center justify-center
+                            overflow-hidden cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-zinc-400
+                            transition-all duration-300 hover:border-zinc-900 active:scale-90"
+                        >
+                          <span className="absolute inset-0 bg-zinc-900 scale-0 group-hover/btn:scale-100 rounded-full transition-transform duration-300 ease-out" />
+                          <ChevronLeft className="relative z-10 w-5 h-5 text-zinc-500 group-hover/btn:text-white transition-colors duration-200" />
+                        </button>
+                        <button
+                          onClick={handleNextService}
+                          aria-label="Next feature"
+                          className="group/btn relative w-12 h-12 rounded-full border border-zinc-200 flex items-center justify-center
+                            overflow-hidden cursor-pointer outline-none focus-visible:ring-2 focus-visible:ring-zinc-400
+                            transition-all duration-300 hover:border-zinc-900 active:scale-90"
+                        >
+                          <span className="absolute inset-0 bg-zinc-900 scale-0 group-hover/btn:scale-100 rounded-full transition-transform duration-300 ease-out" />
+                          <ChevronRight className="relative z-10 w-5 h-5 text-zinc-500 group-hover/btn:text-white transition-colors duration-200" />
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className={`mt-12 pt-8 border-t border-zinc-200 flex items-center gap-4 transition-all duration-700 ease-out delay-[700ms] ${servicesVisible ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-8'}`}>
                 <span className="text-zinc-500 font-light">See how our agents work together</span>
-                <Link to="/dashboard" className="font-medium flex items-center gap-1 text-zinc-600 hover:text-zinc-950 transition-colors">
-                  Try the Agent Pipeline <ArrowRight className="w-4 h-4" />
+                <Link
+                  to="/dashboard"
+                  className="group/link font-medium flex items-center gap-1.5 text-zinc-600 hover:text-zinc-950 transition-colors duration-200"
+                >
+                  Try the Agent Pipeline
+                  <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover/link:translate-x-1" />
                 </Link>
               </div>
             </div>
@@ -919,122 +1178,14 @@ const LandingPage = () => {
           <section id="preview" className="py-16 px-6 bg-zinc-950 text-white relative border-b border-zinc-900">
             <div className="max-w-7xl mx-auto">
               <div className="text-center max-w-3xl mx-auto mb-12">
-                <span className="text-zinc-300 font-medium mb-3 block text-sm font-mono uppercase tracking-widest">Platform Demo</span>
-                <h2 className="text-3xl md:text-5xl font-medium tracking-tight mb-4">
-                  Interactive Dashboard Preview
-                </h2>
+                <span className="text-zinc-400 font-medium mb-3 block text-sm font-mono uppercase tracking-widest">Platform Demo</span>
+                <h2 className="text-3xl md:text-5xl font-medium tracking-tight mb-4">Interactive Dashboard Preview</h2>
                 <p className="text-base text-zinc-400 font-light">
-                  A high-fidelity mockup of the multi-agent console, featuring optimization tracking and live before & after outcomes.
+                  Click any product to see the AI swarm process it — live logs, before &amp; after outcome update instantly.
                 </p>
               </div>
 
-              <div className="grid lg:grid-cols-12 gap-8 items-stretch">
-                {/* Dashboard Console Preview (col-span-7) */}
-                <div className="lg:col-span-7 border border-white/10 rounded-3xl bg-zinc-900/40 p-5 md:p-6 flex flex-col shadow-2xl relative overflow-hidden">
-                  <div className="absolute inset-0 bg-dot-matrix opacity-10 pointer-events-none" />
-
-                  {/* Console Header */}
-                  <div className="flex items-center justify-between border-b border-zinc-800 pb-4 mb-6 z-10">
-                    <div className="flex items-center gap-3">
-                      <div className="flex gap-1.5">
-                        <span className="w-3 h-3 rounded-full bg-red-500/80" />
-                        <span className="w-3 h-3 rounded-full bg-yellow-500/80" />
-                        <span className="w-3 h-3 rounded-full bg-green-500/80" />
-                      </div>
-                      <span className="text-xs font-mono text-zinc-500 ml-4">console.verion.ai</span>
-                    </div>
-                    <span className="px-3 py-1 rounded bg-zinc-1000/10 border border-zinc-600/20 text-zinc-300 font-mono text-[10px] tracking-wider uppercase font-bold animate-pulse">
-                      Live Swarm Monitor
-                    </span>
-                  </div>
-
-                  {/* Console Main Workspace Split Grid */}
-                  <div className="grid md:grid-cols-12 gap-6 flex-1 z-10">
-                    {/* Products Column (col-span-5) */}
-                    <div className="md:col-span-5 bg-zinc-950/60 rounded-2xl border border-white/5 p-4 flex flex-col space-y-3">
-                      <span className="text-[10px] font-mono uppercase tracking-wider text-zinc-500 block mb-1">Store Catalog</span>
-                      {[
-                        { title: "Men's Running Shoes", seo: "96%", status: "Optimized", badge: "bg-emerald-500/20 text-emerald-400" },
-                        { title: "Leather Hiking Boots", seo: "94%", status: "Optimized", badge: "bg-emerald-500/20 text-emerald-400" },
-                        { title: "Waterproof Dome Tent", seo: "42%", status: "Pending", badge: "bg-yellow-500/20 text-yellow-400" },
-                        { title: "Wireless charging Pad", seo: "89%", status: "Optimized", badge: "bg-emerald-500/20 text-emerald-400" }
-                      ].map((item, idx) => (
-                        <div key={idx} className="p-3 bg-zinc-900/40 rounded-xl border border-zinc-800/50 flex flex-col gap-1 hover:border-white/10 transition-all select-none">
-                          <div className="flex justify-between items-start">
-                            <span className="font-semibold text-xs text-white truncate max-w-[120px]">{item.title}</span>
-                            <span className={`text-[9px] font-mono px-2 py-0.5 rounded font-bold ${item.badge}`}>{item.status}</span>
-                          </div>
-                          <div className="flex justify-between items-center text-[10px] text-zinc-500 mt-1">
-                            <span>SEO Score</span>
-                            <span className="font-mono text-zinc-300">{item.seo}</span>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
-
-                    {/* Active Swarm Logs (col-span-7) */}
-                    <div className="md:col-span-7 bg-zinc-950/80 rounded-2xl border border-white/5 p-4 flex flex-col font-mono text-[10px] text-zinc-400 space-y-3 justify-between">
-                      <div>
-                        <div className="flex justify-between border-b border-zinc-900 pb-2 mb-2">
-                          <span className="text-zinc-500">// active_agent_stream</span>
-                          <span className="text-zinc-300 font-bold">13:42:09</span>
-                        </div>
-                        <div className="space-y-1.5 overflow-hidden leading-relaxed select-none">
-                          <p className="text-zinc-500">&gt; Initializing SEO optimization agent...</p>
-                          <p className="text-zinc-200 font-semibold">&gt; [SEO Agent] Keywords identified: "lightweight", "running shoes", "marathon training"</p>
-                          <p className="text-zinc-500">&gt; Sanitizing vendor details...</p>
-                          <p className="text-emerald-400 font-semibold">&gt; [Privacy Guard] Redacted wholesale cost field $12.50 to [SAFE]</p>
-                          <p className="text-zinc-500">&gt; Validating grammatical quality index...</p>
-                          <p className="text-white font-semibold">&gt; [Validator Agent] Flesch Reading Ease score: 72.8 (Optimal)</p>
-                        </div>
-                      </div>
-                      <div className="pt-2 border-t border-zinc-900 flex justify-between items-center">
-                        <span className="text-zinc-500">Draft Listing Adaptations</span>
-                        <span className="text-emerald-400 font-bold animate-pulse font-sans">Draft Synced ✓</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* Before vs After Card (col-span-5) */}
-                <div className="lg:col-span-5 flex flex-col gap-6">
-                  <div className="p-6 md:p-8 rounded-3xl border border-white/5 bg-zinc-900/30 flex flex-col justify-between flex-1 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-32 h-32 bg-zinc-1000/5 rounded-full blur-3xl pointer-events-none" />
-                    <div>
-                      <span className="text-xs font-mono tracking-widest text-zinc-500 uppercase block mb-4">Outcome Comparison</span>
-                      <h3 className="text-xl font-medium mb-6">Before & After Listing</h3>
-
-                      {/* Before State */}
-                      <div className="p-5 bg-zinc-950/60 rounded-2xl border border-red-500/10 mb-5 relative group hover:border-red-500/30 transition-all select-none">
-                        <span className="absolute -top-2.5 left-4 bg-red-500/20 text-red-400 border border-red-500/30 text-[9px] font-mono uppercase tracking-widest px-2.5 py-0.5 rounded-full font-bold">
-                          Before
-                        </span>
-                        <div className="space-y-2 mt-1">
-                          <h4 className="font-semibold text-sm text-zinc-300">Title: Men's Running Shoes</h4>
-                          <p className="text-xs text-zinc-500 font-light leading-relaxed">
-                            Good running shoes for men.
-                          </p>
-                        </div>
-                      </div>
-
-                      {/* After State */}
-                      <div className="p-5 bg-zinc-950/60 rounded-2xl border border-emerald-500/10 relative group hover:border-emerald-500/30 transition-all select-none">
-                        <span className="absolute -top-2.5 left-4 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[9px] font-mono uppercase tracking-widest px-2.5 py-0.5 rounded-full font-bold">
-                          After (AI Swarm Optimized)
-                        </span>
-                        <div className="space-y-2.5 mt-1">
-                          <h4 className="font-semibold text-sm text-white flex items-center gap-1.5">
-                            Title: Lightweight Men's Running Shoes for Daily Training and Marathon Preparation
-                          </h4>
-                          <p className="text-xs text-zinc-300 font-light leading-relaxed">
-                            Engineered for comfort and performance with breathable mesh construction, responsive cushioning, and durable outsole technology.
-                          </p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+              <InteractiveDashboard products={DASHBOARD_PRODUCTS} />
             </div>
           </section>
 
